@@ -25,12 +25,12 @@ public class MyWebpageTests {
         sleep(2000);
 
         //Insert the word "Sven"
-        $("input[id='username']").sendKeys("borlin-2");
+        $("input[id='username']").sendKeys("");
 
         sleep(2000);
 
         //find element by the name "password" and insert the password
-        $("input[name='password']").sendKeys("27ShermanRoad");
+        $("input[name='password']").sendKeys("");
 
         //find element by the name "submit" and click it
         $("input[name='submit']").click();
