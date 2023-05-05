@@ -1,18 +1,31 @@
-import org.json.simple.parser.ParseException;
+import com.codeborne.selenide.impl.WebElementSelector;
+import io.qameta.allure.internal.shadowed.jackson.databind.JsonNode;
+import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 import static com.codeborne.selenide.Selenide.*;
+
+import java.io.File;
 import java.io.IOException;
 
 public class MyWebpageTests {
 
-    @Test
-    public void test1() throws IOException, ParseException {
+    @Disabled
+    @Test //THE LOG IN TEST
+    public void test1() {
         open("https://www.ltu.se/");
         sleep(2000);
 
-        //Handle the pop-up window by clickling the button with the text "Tillåt alla cookies"
+        //Handle the pop-up window by clicking the button with the text "Tillåt alla cookies"
         $("button[class='CybotCookiebotDialogBodyButton']").click();
         sleep(2000);
 
@@ -24,28 +37,100 @@ public class MyWebpageTests {
         $x("//a[text()='Mitt LTU']").click();
         sleep(2000);
 
-        //Insert the word "Sven"
-        $("input[id='username']").sendKeys("borlin-2");
+        // Creating an instance of File with the pathname to the login credentials
+        File jsonFile = new File("C:\\temp\\ltu.json");
+        String email = null;
+        String password = null;
 
-        sleep(2000);
+        try {
+            // Creating an instance of ObjectMapper to read the JSON file
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        //find element by the name "password" and insert the password
-        $("input[name='password']").sendKeys("27ShermanRoad");
+            // Using a FileInputStream to read the JSON file into a JsonNode object
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-        //find element by the name "submit" and click it
-        $("input[name='submit']").click();
-        sleep(2000);
+            // Retrieve the username and password from the JsonNode object
+            email = jsonNode.get("ltuCredentials").get("email").asText();
+            password = jsonNode.get("ltuCredentials").get("password").asText();
+
+        } catch (IOException i) {
+            // Print the stack trace of the exception if an error occurs
+            i.printStackTrace();
         }
 
+        try {
+            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            $(By.id("username")).sendKeys(email);
+            $(By.id("password")).sendKeys(password);
 
-    @Disabled
-    @Test
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        //find hidden element by the text "Logga in" with CSS and click it
+        // Wait for the element to become visible and not transparent
+        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
+        // Perform actions on the element once it is visible and not transparent
+        $("[name='submit']").click();
+
+        sleep(20000);
+    }
+
+    @Test //THE TRANSCRIPT DOWNLOAD TEST
     public void test2() {
+        open("https://portal.ltu.se/web/student/");
+        sleep(2000);
+
+        $("[class='nav-item-label']").waitUntil(not(cssValue("opacity", "0")), 10000);
+        // Perform actions on the element once it is visible and not transparent
+        $("[class='nav-item-label']").click();
+
+        // Creating an instance of File with the pathname to the login credentials
+        File jsonFile = new File("C:\\temp\\ltu.json");
+        String email = null;
+        String password = null;
+
+        try {
+            // Creating an instance of ObjectMapper to read the JSON file
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Using a FileInputStream to read the JSON file into a JsonNode object
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
+
+            // Retrieve the username and password from the JsonNode object
+            email = jsonNode.get("ltuCredentials").get("email").asText();
+            password = jsonNode.get("ltuCredentials").get("password").asText();
+
+        } catch (IOException i) {
+            // Print the stack trace of the exception if an error occurs
+            i.printStackTrace();
+        }
+
+        try {
+            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            $(By.id("username")).sendKeys(email);
+            $(By.id("password")).sendKeys(password);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
+        // Perform actions on the element once it is visible and not transparent
+        $("[name='submit']").click();
+
+        sleep(2000);
+
+
     }
 
     @Disabled
     @Test
     public void test3() {
+        open("https://www.student.ladok.se/student/app/studentwebb/");
+        sleep(2000);
+
+
     }
 
     @Disabled
