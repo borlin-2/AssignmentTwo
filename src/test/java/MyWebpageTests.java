@@ -11,6 +11,12 @@ import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.*;
+import java.util.logging.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -125,7 +131,7 @@ public class MyWebpageTests {
     }
 
     @Disabled
-    @Test
+    @Test //THE TRANSCRIPT DOWNLOAD TEST
     public void test3() {
         open("https://www.student.ladok.se/student/app/studentwebb/");
         sleep(2000);
