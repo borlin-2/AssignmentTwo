@@ -132,20 +132,8 @@ public class MyWebpageTests {
 
         sleep(2000);
 
-        // in the new URL https://www.student.ladok.se/student/app/studentwebb/ we need to wait to the elementwith the aria label "Inloggning via ditt lärosäte / Login via your university" is visible and not transparent
-        // and then we click it
-        $("[aria-label='Inloggning via ditt lärosäte / Login via your university']").waitUntil(not(cssValue("opacity", "0")), 10000);
-
-        //click button with text "I understand"
-        //$(By.xpath("//button[text()='I understand']")).click();
-
-        //Wait until the button with the aria label "Inloggning via ditt lärosäte / Login via your university"
-        //is visible and not transparent
-       // $("[aria-label='Inloggning via ditt lärosäte / Login via your university']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        // Perform actions on the element once it is visible and not transparent
-        //$("[aria-label='Inloggning via ditt lärosäte / Login via your university']").click();
-
-
+        //Wait until the button with the class containing the text "light" is visible and not transparent then click it, using xpath
+        $x("//button[@class='btn btn-light']").waitUntil(not(cssValue("opacity", "0")), 10000).click();
 
         sleep(15000);
 
