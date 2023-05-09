@@ -85,48 +85,47 @@ public class MyWebpageTests {
 
     @Test //THE TRANSCRIPT DOWNLOAD TEST
     public void test2() {
-
-
+        //Opens the Chrome webbrowser and goes to the webpage https://www.student.ladok.se/student/app/studentwebb/
         open("https://www.student.ladok.se/student/app/studentwebb/");
 
+        //Handles the cookie banner by clicking the button that allows all cookies.
         var v1 = $x("//button[@class='btn btn-light']");
         v1.click();
-
         sleep(2000);
 
+        //Clicks the login button in the middle of the page.
         $("[href*='/student/login?ret=/app/studentwebb']").click();
 
-        // find search field with the id "searchinput" and click it
+        //Finds the search field with the id "searchinput" and inserts the text "lulea" to seach for the right university.
         var v2 = $("#searchinput");
         v2.sendKeys("lulea");
 
-        // click the element with the aria-label "Select Lulea University of Technology"
+        //Finds the search result that corresponds with the search and clicks it.
         var v3 = $("[aria-label='Select Lulea University of Technology']");
         v3.click();
 
-        // Creating an instance of File with the pathname to the login credentials
+        //Here we are creating an instance of the class File with the pathname to the login credentials for LTU.
         File jsonFile = new File("C:\\temp\\ltu.json");
         String email = null;
         String password = null;
 
         try {
-            // Creating an instance of ObjectMapper to read the JSON file
+            //We are creating an instance of ObjectMapper to read the JSON file where the credentials are stored.
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Using a FileInputStream to read the JSON file into a JsonNode object
+            //We are using a FileInputStream to read the JSON file into a JsonNode object
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            // Retrieve the username and password from the JsonNode object
+            //We retrieve the username and password from the JsonNode object, aka the login credentials in the JSON file.
             email = jsonNode.get("ltuCredentials").get("email").asText();
             password = jsonNode.get("ltuCredentials").get("password").asText();
 
         } catch (IOException i) {
-            // Print the stack trace of the exception if an error occurs
+            //This prints the stack trace of the exception if an error occurs
             i.printStackTrace();
         }
-
         try {
-            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            //Finds the fields for the email(username) and password, and then we enter the login credentials in each field.
             $(By.id("username")).sendKeys(email);
             $(By.id("password")).sendKeys(password);
 
@@ -134,18 +133,54 @@ public class MyWebpageTests {
             throw new RuntimeException(e);
         }
 
+        //Here we find the button with the name "submit" and click it.
         $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        // Perform actions on the element once it is visible and not transparent
         $("[name='submit']").click();
 
+        sleep(2000);
 
+        //Here we click the Menu button in the top right corner of the page.
+        var v4 = $(".navbar-toggler");
+        v4.click();
 
+        //Here we click the option Transcripts and certificates in the drop-down menu.
+        $("[href*='/student/app/studentwebb/intyg']").click();
 
+        //The following code is commented out because it is creating a new transcript every time the test is run,
+        //and it is not possible to delete the transcript from the webpage.
+        //Instead, I am using the transcript that is already created on the webpage to download it.
+        //Skipp to line 178 to see the code for downloading the transcript.
 
+        //Clicks the button Create to create a new transcript.
+        /* var v5 = $x("//button[@class='btn btn-ladok-brand']");
+        v5.click();
 
+        // Clicks the menu of different types of transcripts and/or certificates.
+        var v6 = $("#intygstyp");
+        v6.click();
 
+        //Clicks the option Certificate of Registration in the drop-down menu.
+        var v7 = $("[value='1: Object']");
+        v7.click();
 
-        sleep(5000);
+        //Finds the field for input for the From date and sends the date.
+        var v8 = $("#start");
+        v8.sendKeys("20220801");
+
+        //Finds the field for input for the To date and sends the date.
+        var v9 = $("#slut");
+        v9.sendKeys("20230630");
+
+        //We are clicking the button Create to creat the transcript.
+        var v10 = $x("//button[@class='btn btn-ladok-brand text-nowrap me-lg-3']");
+        v10.click(); */
+
+        //Here the code for downloading the transcript starts.
+
+        //Clicks on the last created Transcript and saves it to
+        //C:\Users\Administrator\IdeaProjects\AssignmentTwo\build\downloads
+        var v11 = $("[href*='https://www.student.ladok.se/student/proxy/extintegration/internal/intyg/68c23e47-eea8-11ed-b9d5-99ac793c4cff/pdf']");
+        v11.click();
 
     }
 
