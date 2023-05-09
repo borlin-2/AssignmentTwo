@@ -82,8 +82,77 @@ public class MyWebpageTests {
         sleep(20000);
     }
 
+
     @Test //THE TRANSCRIPT DOWNLOAD TEST
     public void test2() {
+
+
+        open("https://www.student.ladok.se/student/app/studentwebb/");
+
+        var v1 = $x("//button[@class='btn btn-light']");
+        v1.click();
+
+        sleep(2000);
+
+        $("[href*='/student/login?ret=/app/studentwebb']").click();
+
+        // find search field with the id "searchinput" and click it
+        var v2 = $("#searchinput");
+        v2.sendKeys("lulea");
+
+        // click the element with the aria-label "Select Lulea University of Technology"
+        var v3 = $("[aria-label='Select Lulea University of Technology']");
+        v3.click();
+
+        // Creating an instance of File with the pathname to the login credentials
+        File jsonFile = new File("C:\\temp\\ltu.json");
+        String email = null;
+        String password = null;
+
+        try {
+            // Creating an instance of ObjectMapper to read the JSON file
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Using a FileInputStream to read the JSON file into a JsonNode object
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
+
+            // Retrieve the username and password from the JsonNode object
+            email = jsonNode.get("ltuCredentials").get("email").asText();
+            password = jsonNode.get("ltuCredentials").get("password").asText();
+
+        } catch (IOException i) {
+            // Print the stack trace of the exception if an error occurs
+            i.printStackTrace();
+        }
+
+        try {
+            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            $(By.id("username")).sendKeys(email);
+            $(By.id("password")).sendKeys(password);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
+        // Perform actions on the element once it is visible and not transparent
+        $("[name='submit']").click();
+
+
+
+
+
+
+
+
+        sleep(5000);
+
+    }
+
+
+    @Disabled
+    @Test //THE FINAL EXAMINATION INFO TEST
+    public void test3() {
         open("https://portal.ltu.se/web/student/");
         sleep(2000);
 
@@ -132,25 +201,21 @@ public class MyWebpageTests {
 
         sleep(2000);
 
-        //Wait until the button with the class containing the text "light" is visible and not transparent then click it, using xpath
-        $x("//button[@class='btn btn-light']").waitUntil(not(cssValue("opacity", "0")), 10000).click();
+        // Switch to the new tab
+        switchTo().window(1);
 
-        sleep(15000);
 
     }
 
     @Disabled
-    @Test //THE TRANSCRIPT DOWNLOAD TEST
-    public void test3() {
-        open("https://www.student.ladok.se/student/app/studentwebb/");
+    @Test //THE DOWNLOAD SYLLABUS TEST
+    public void test4() {
+        open("https://www.ltu.se/");
         sleep(2000);
 
-
-    }
-
-    @Disabled
-    @Test
-    public void test4() {
+        //Handle the pop-up window by clicking the button with the text "Tillåt alla cookies"
+        $("button[class='CybotCookiebotDialogBodyButton']").click();
+        sleep(2000);
     }
 
 }
