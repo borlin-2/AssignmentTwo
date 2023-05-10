@@ -4,6 +4,7 @@ import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,46 +27,43 @@ import java.io.IOException;
 public class MyWebpageTests {
 
     @Disabled
-    @Test //THE LOG IN TEST
+    @Test //THE LOG IN TEST - DONE
     public void test1() {
+        //Opens the LTU webpage
         open("https://www.ltu.se/");
-        sleep(2000);
 
-        //Handle the pop-up window by clicking the button with the text "Tillåt alla cookies"
+        //Handles the pop-up window by clicking the button with the text "Tillåt alla cookies"
         $("button[class='CybotCookiebotDialogBodyButton']").click();
-        sleep(2000);
 
-        //find hidden element by the text "Student" with Xpath and click it
+        //Finds the Student lin in the top right corner and clicks it.
         $x("//a[text()='Student']").click();
-        sleep(2000);
 
-        //find hidden element by the text "MITT LTU" with Xpath and click it
+        //Finds the login link named "MITT LTU" and clicks it.
         $x("//a[text()='Mitt LTU']").click();
-        sleep(2000);
 
-        // Creating an instance of File with the pathname to the login credentials
+        //We create an instance of File with the pathname to the login credentials.
         File jsonFile = new File("C:\\temp\\ltu.json");
         String email = null;
         String password = null;
 
         try {
-            // Creating an instance of ObjectMapper to read the JSON file
+            //We are creating an instance of ObjectMapper to read the JSON file with the login credentials.
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Using a FileInputStream to read the JSON file into a JsonNode object
+            //We use a FileInputStream to read the JSON file into a JsonNode object
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            // Retrieve the username and password from the JsonNode object
+            //We retrieve the username and password from the JsonNode object.
             email = jsonNode.get("ltuCredentials").get("email").asText();
             password = jsonNode.get("ltuCredentials").get("password").asText();
 
         } catch (IOException i) {
-            // Print the stack trace of the exception if an error occurs
+            //This prints the stack trace of the exception if an error occurs
             i.printStackTrace();
         }
 
         try {
-            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            //Here we are finding the fields for the email(username) and password, and then we enter the login credentials.
             $(By.id("username")).sendKeys(email);
             $(By.id("password")).sendKeys(password);
 
@@ -73,17 +71,13 @@ public class MyWebpageTests {
             throw new RuntimeException(e);
         }
 
-        //find hidden element by the text "Logga in" with CSS and click it
-        // Wait for the element to become visible and not transparent
+        //Finds and clicks the button "Logga in".
         $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        // Perform actions on the element once it is visible and not transparent
         $("[name='submit']").click();
-
-        sleep(20000);
     }
 
-
-    @Test //THE TRANSCRIPT DOWNLOAD TEST
+    @Disabled
+    @Test //THE TRANSCRIPT DOWNLOAD TEST - DONE
     public void test2() {
         //Opens the Chrome webbrowser and goes to the webpage https://www.student.ladok.se/student/app/studentwebb/
         open("https://www.student.ladok.se/student/app/studentwebb/");
@@ -149,7 +143,7 @@ public class MyWebpageTests {
         //The following code is commented out because it is creating a new transcript every time the test is run,
         //and it is not possible to delete the transcript from the webpage.
         //Instead, I am using the transcript that is already created on the webpage to download it.
-        //Skipp to line 178 to see the code for downloading the transcript.
+        //Skipp to line 172 to see the code for downloading the transcript.
 
         //Clicks the button Create to create a new transcript.
         /* var v5 = $x("//button[@class='btn btn-ladok-brand']");
@@ -183,7 +177,6 @@ public class MyWebpageTests {
         v11.click();
 
     }
-
 
     @Disabled
     @Test //THE FINAL EXAMINATION INFO TEST
@@ -231,26 +224,69 @@ public class MyWebpageTests {
 
         sleep(2000);
 
-        //find the element with the href attribute containing the text "https://www.student.ladok.se/student/#/intyg" and click it
-        $("[href*='https://www.student.ladok.se/student/#/intyg']").click();
+        //Tentamen
 
-        sleep(2000);
+        //Tentamenschema
 
-        // Switch to the new tab
+       // Switch to the new tab
         switchTo().window(1);
+
+        //Sök på I0015N
+
+        //Klicka på rätt länk
+
+        //Ta en screen shot och spara den med namned final_examination.jpeg
+
+        //if (final_examination.jpeg.exists()) overwrite
+
+
+
 
 
     }
 
     @Disabled
-    @Test //THE DOWNLOAD SYLLABUS TEST
+    @Test //THE DOWNLOAD SYLLABUS TEST - MAYBE DONE
     public void test4() {
+        //Opens the webpage https://www.ltu.se/
         open("https://www.ltu.se/");
-        sleep(2000);
 
-        //Handle the pop-up window by clicking the button with the text "Tillåt alla cookies"
+        //Handles the pop-up window by clicking the button with the text "Tillåt alla cookies"
         $("button[class='CybotCookiebotDialogBodyButton']").click();
         sleep(2000);
+
+        //Finds the search field and clicks it
+        var t1 = $("[aria-label='Sök']");
+        t1.click();
+
+        //Places the text "I0015N" in the search field
+        var t2 = $(".cludo-top-input");
+        t2.sendKeys("I0015N");
+
+        //Clicks the search button after the text "I0015N" is placed in the search field
+        var t3 = $("[aria-label='Sök']", 1);;
+        t3.click();
+
+        //Clicks the URL link to the course I0015N homepage
+        var t4 = $("[href='https://www.ltu.se/edu/course/i00/i0015n/i0015n-test-av-it-system-1.81215']");
+        t4.click();
+
+        //Clicks the tab for the course in the spring 2023
+        var t5 = $("[href='/edu/course/I00/I0015N/I0015N-Test-av-IT-system-1.81215?termin=V23']");
+        t5.click();
+
+        //Clicks the link to the syllabus
+        var t6 = $("[href='/edu/course/I00/I0015N/I0015N-Test-av-IT-system-1.81215?termin=V23&kursView=kursplan']");
+        t6.click();
+
+        //Click on the link to the syllabus PDF and downloads it to C:\Users\Administrator\IdeaProjects\AssignmentTwo\build\downloads
+        var t7 = $("[href='https://webapp.ltu.se/epok/dynpdf/public/kursplan/downloadPublicKursplan.pdf?kursKod=I0015N&lasPeriod=211&locale=sv']");
+        t7.click();
+
+
+
+
+
     }
 
 }
