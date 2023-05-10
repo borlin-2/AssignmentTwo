@@ -1,33 +1,19 @@
-import com.codeborne.selenide.impl.WebElementSelector;
 import io.qameta.allure.internal.shadowed.jackson.databind.JsonNode;
 import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import static com.codeborne.selenide.Condition.cssValue;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.*;
-import java.util.logging.*;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import static com.codeborne.selenide.Selenide.*;
-
 import java.io.File;
 import java.io.IOException;
+import com.codeborne.selenide.Screenshots;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class MyWebpageTests {
 
-    @Disabled
-    @Test //THE LOG IN TEST - DONE
+    @Test //THE LOGIN and LOG OUT TEST
     public void test1() {
         //Opens the LTU webpage
         open("https://www.ltu.se/");
@@ -72,14 +58,21 @@ public class MyWebpageTests {
         }
 
         //Finds and clicks the button "Logga in".
-        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        $("[name='submit']").click();
+        var a1 = $("[name='submit']");
+        a1.click();
+
+        //Finds and clicks the menu in top right corner
+        var a2 = $(".user-full-name");
+        a2.click();
+
+        //Finds and clicks the button "Logga ut".
+        var a3 = $("[href='/c/portal/logout']");
+        a3.click();
     }
 
-    @Disabled
-    @Test //THE TRANSCRIPT DOWNLOAD TEST - DONE
+    @Test //THE TRANSCRIPT DOWNLOAD TEST
     public void test2() {
-        //Opens the Chrome webbrowser and goes to the webpage https://www.student.ladok.se/student/app/studentwebb/
+        //Opens the Chrome web browser and goes to the webpage https://www.student.ladok.se/student/app/studentwebb/
         open("https://www.student.ladok.se/student/app/studentwebb/");
 
         //Handles the cookie banner by clicking the button that allows all cookies.
@@ -90,7 +83,7 @@ public class MyWebpageTests {
         //Clicks the login button in the middle of the page.
         $("[href*='/student/login?ret=/app/studentwebb']").click();
 
-        //Finds the search field with the id "searchinput" and inserts the text "lulea" to seach for the right university.
+        //Finds the search field with the id "searchinput" and inserts the text "lulea" to search for the right university.
         var v2 = $("#searchinput");
         v2.sendKeys("lulea");
 
@@ -128,14 +121,12 @@ public class MyWebpageTests {
         }
 
         //Here we find the button with the name "submit" and click it.
-        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        $("[name='submit']").click();
-
-        sleep(2000);
+        var v4 = $("[name='submit']");
+        v4.click();
 
         //Here we click the Menu button in the top right corner of the page.
-        var v4 = $(".navbar-toggler");
-        v4.click();
+        var v5 = $(".navbar-toggler");
+        v5.click();
 
         //Here we click the option Transcripts and certificates in the drop-down menu.
         $("[href*='/student/app/studentwebb/intyg']").click();
@@ -143,74 +134,72 @@ public class MyWebpageTests {
         //The following code is commented out because it is creating a new transcript every time the test is run,
         //and it is not possible to delete the transcript from the webpage.
         //Instead, I am using the transcript that is already created on the webpage to download it.
-        //Skipp to line 172 to see the code for downloading the transcript.
+        //Skipp to line 163 to see the code for downloading the transcript.
 
         //Clicks the button Create to create a new transcript.
-        /* var v5 = $x("//button[@class='btn btn-ladok-brand']");
-        v5.click();
-
-        // Clicks the menu of different types of transcripts and/or certificates.
-        var v6 = $("#intygstyp");
+        /* var v6 = $x("//button[@class='btn btn-ladok-brand']");
         v6.click();
 
-        //Clicks the option Certificate of Registration in the drop-down menu.
-        var v7 = $("[value='1: Object']");
+        // Clicks the menu of different types of transcripts and/or certificates.
+        var v7 = $("#intygstyp");
         v7.click();
 
+        //Clicks the option Certificate of Registration in the drop-down menu.
+        var v8 = $("[value='1: Object']");
+        v8.click();
+
         //Finds the field for input for the From date and sends the date.
-        var v8 = $("#start");
-        v8.sendKeys("20220801");
+        var v9 = $("#start");
+        v9.sendKeys("20220801");
 
         //Finds the field for input for the To date and sends the date.
-        var v9 = $("#slut");
-        v9.sendKeys("20230630");
+        var v10 = $("#slut");
+        v10.sendKeys("20230630");
 
         //We are clicking the button Create to creat the transcript.
-        var v10 = $x("//button[@class='btn btn-ladok-brand text-nowrap me-lg-3']");
-        v10.click(); */
+        var v11 = $x("//button[@class='btn btn-ladok-brand text-nowrap me-lg-3']");
+        v11.click(); */
 
         //Here the code for downloading the transcript starts.
 
         //Clicks on the last created Transcript and saves it to
         //C:\Users\Administrator\IdeaProjects\AssignmentTwo\build\downloads
-        var v11 = $("[href*='https://www.student.ladok.se/student/proxy/extintegration/internal/intyg/68c23e47-eea8-11ed-b9d5-99ac793c4cff/pdf']");
-        v11.click();
-
+        var v12 = $("[href*='https://www.student.ladok.se/student/proxy/extintegration/internal/intyg/68c23e47-eea8-11ed-b9d5-99ac793c4cff/pdf']");
+        v12.click();
     }
 
-    @Disabled
     @Test //THE FINAL EXAMINATION INFO TEST
     public void test3() {
+        //Opens the Chrome web browser and goes to the webpage https://www.student.ladok.se/student/app/studentwebb/
         open("https://portal.ltu.se/web/student/");
-        sleep(2000);
 
-        $("[class='nav-item-label']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        // Perform actions on the element once it is visible and not transparent
-        $("[class='nav-item-label']").click();
+        //Clicks "Logga in" in the right top corner.
+        var y1 = $("[class='nav-item-label']");
+        y1.click();
 
-        // Creating an instance of File with the pathname to the login credentials
+        //Creating an instance of File with the pathname to the LTU login credentials
         File jsonFile = new File("C:\\temp\\ltu.json");
         String email = null;
         String password = null;
 
         try {
-            // Creating an instance of ObjectMapper to read the JSON file
+            //Creating an instance of ObjectMapper to read the JSON file with the credentials
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Using a FileInputStream to read the JSON file into a JsonNode object
+            //Using a FileInputStream to read the JSON file into a JsonNode object
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            // Retrieve the username and password from the JsonNode object
+            //Retrieve the username and password from the JsonNode object
             email = jsonNode.get("ltuCredentials").get("email").asText();
             password = jsonNode.get("ltuCredentials").get("password").asText();
 
         } catch (IOException i) {
-            // Print the stack trace of the exception if an error occurs
+            //Prints the stack trace of the exception if an error occurs
             i.printStackTrace();
         }
 
         try {
-            // Here we are finding the fields for the email(username) and password, and then we enter the login credentials
+            //Finding the fields for the email(username) and password, and then enters the login credentials
             $(By.id("username")).sendKeys(email);
             $(By.id("password")).sendKeys(password);
 
@@ -218,35 +207,64 @@ public class MyWebpageTests {
             throw new RuntimeException(e);
         }
 
-        $("[name='submit']").waitUntil(not(cssValue("opacity", "0")), 10000);
-        // Perform actions on the element once it is visible and not transparent
-        $("[name='submit']").click();
+        // Clicks the button with the name "Logga in".
+        var y2 = $("[name='submit']");
+        y2.click();
 
-        sleep(2000);
+        //Clicks Tentamen in the left menu.
+        var y3 = $(".hasChildren", 1);
+        y3.click();
 
-        //Tentamen
+        //Clicks the link named Tentamensschema.
+        var y4 = $("[href='https://tenta.ltu.se/index.jsp']");
+        y4.click();
 
-        //Tentamenschema
-
-       // Switch to the new tab
+        //Switches focus to the new tab
         switchTo().window(1);
 
-        //Sök på I0015N
+        //Finds the search field for input.
+        var y5 = $("#enkel_sokfalt");
+        y5.click();
 
-        //Klicka på rätt länk
+        //Enters the course code "I0015N-VT23-47000" in the search field.
+        var y6 = $("#enkel_sokfalt");
+        y6.sendKeys("I0015N-VT23-47000");
 
-        //Ta en screen shot och spara den med namned final_examination.jpeg
+        //Clicks the button with the text "Sök schema".
+        var y7 = $("#enkel_sokknapp");
+        y7.click();
 
-        //if (final_examination.jpeg.exists()) overwrite
+        //Clicks the document link in the search result.
+        var y8 = $("[target='_blank']");
+        y8.click();
 
+        //Switches focus to the new tab
+        switchTo().window(2);
 
+        //Defines the target directory and file path for the coming screenshot.
+        String targetFilePath = "C:\\Users\\Administrator\\IdeaProjects\\AssignmentTwo\\target\\screenshots\\final_examination.jpeg";
 
+        //Take a screenshot of the webpage in tab 3.
+        File screenshotFile = Screenshots.takeScreenShotAsFile();
 
+        //Defines the target file
+        File targetFile = new File(targetFilePath);
 
+        //Checks if the target file already exists.
+        if (targetFile.exists()) {
+            //Deletes the existing file in it exists.
+            targetFile.delete();
+        }
+
+        //Moves the screenshot file to the target directory with the desired file name.
+        try {
+            Files.move(screenshotFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Disabled
-    @Test //THE DOWNLOAD SYLLABUS TEST - MAYBE DONE
+    @Test //THE DOWNLOAD SYLLABUS TEST
     public void test4() {
         //Opens the webpage https://www.ltu.se/
         open("https://www.ltu.se/");
@@ -264,7 +282,7 @@ public class MyWebpageTests {
         t2.sendKeys("I0015N");
 
         //Clicks the search button after the text "I0015N" is placed in the search field
-        var t3 = $("[aria-label='Sök']", 1);;
+        var t3 = $("[aria-label='Sök']", 1);
         t3.click();
 
         //Clicks the URL link to the course I0015N homepage
@@ -282,11 +300,5 @@ public class MyWebpageTests {
         //Click on the link to the syllabus PDF and downloads it to C:\Users\Administrator\IdeaProjects\AssignmentTwo\build\downloads
         var t7 = $("[href='https://webapp.ltu.se/epok/dynpdf/public/kursplan/downloadPublicKursplan.pdf?kursKod=I0015N&lasPeriod=211&locale=sv']");
         t7.click();
-
-
-
-
-
     }
-
 }
